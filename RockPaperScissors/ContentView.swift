@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    private var userOptions = ["Rock", "Paper", "Scissors"]
+    @State private var userOptions = ["✊🏻", "🖐🏻", "✌🏻"]
     @State private var hasToWin = Bool.random()
     @State private var randomChoice = Int.random(in: 0...2)
     @State private var score = 0
@@ -17,30 +17,44 @@ struct ContentView: View {
     @State private var gameEnded = false
     
     var body: some View {
-        VStack(spacing: 15) {
-            VStack {
-                Text("\(userOptions[randomChoice])")
-            }
-            HStack {
-                ForEach(userOptions, id: \.self) { option in
-                    Button {
-                        checkAnswer(option)
-                    } label: {
-                        Text("\(option)")
-                    }
-                    
+        ZStack {
+            RadialGradient(stops: [
+                .init(color: .mint, location: 0.6),
+                .init(color: .indigo, location: 0.1),
+            ], center: .top, startRadius: 90, endRadius: 700)
+            .ignoresSafeArea()
+            
+            VStack(spacing: 15) {
+                VStack(spacing: 30) {
+                    Text(hasToWin ? "Try to Win" : "Try to Lose")
+                    Text("\(userOptions[randomChoice])")
+                        .font(.system(size: 90))
+                    Text("VS")
+                        .font(.system(size: 90))
+                        .fontWeight(.ultraLight)
                 }
+                HStack(spacing: 15) {
+                    ForEach(userOptions, id: \.self) { option in
+                        Button {
+                            checkAnswer(option)
+                        } label: {
+                            Text("\(option)")
+                                .font(.system(size:45))
+                        }
+                        
+                    }
+                }
+                .padding()
+                
+                Text("Actual score: \(score)")
+                
+            }.alert("The game has ended", isPresented: $gameEnded) {
+                Button("New game", action: resetGame)
+            } message: {
+                Text("Your final score is: \(score)")
             }
-            .padding()
-            
-            Text(hasToWin ? "You have to Win" : "You have to  Lose")
-            Text("Actual score: \(score)")
-            
-        }.alert("The game has ended", isPresented: $gameEnded) {
-            Button("New game", action: resetGame)
-        } message: {
-            Text("Your final score is: \(score)")
         }
+
     }
     
     func checkAnswer(_ option: String) -> Void {
@@ -48,6 +62,7 @@ struct ContentView: View {
         if rounds == 4 {
             gameEnded = true
         } else {
+            userOptions.shuffle()
             hasToWin = Bool.random()
             randomChoice = Int.random(in: 0...2)
             rounds += 1
@@ -60,29 +75,29 @@ struct ContentView: View {
     }
     
     func getScore(_ option: String) {
-        if option == "Rock" && userOptions[randomChoice] == "Paper" && hasToWin  {
+        if option == "✊🏻" && userOptions[randomChoice] == "🖐🏻" && hasToWin  {
             score -= 1
-        } else if option == "Rock" && userOptions[randomChoice] == "Paper" && !hasToWin  {
+        } else if option == "✊🏻" && userOptions[randomChoice] == "🖐🏻" && !hasToWin  {
             score += 1
-        } else if option == "Rock" && userOptions[randomChoice] == "Scissors" && hasToWin  {
+        } else if option == "✊🏻" && userOptions[randomChoice] == "✌🏻" && hasToWin  {
             score += 1
-        } else if option == "Rock" && userOptions[randomChoice] == "Scissors" && !hasToWin  {
+        } else if option == "✊🏻" && userOptions[randomChoice] == "✌🏻" && !hasToWin  {
             score -= 1
-        } else if option == "Paper" && userOptions[randomChoice] == "Rock" && hasToWin  {
+        } else if option == "🖐🏻" && userOptions[randomChoice] == "✊🏻" && hasToWin  {
             score += 1
-        } else if option == "Paper" && userOptions[randomChoice] == "Rock" && !hasToWin  {
+        } else if option == "🖐🏻" && userOptions[randomChoice] == "✊🏻" && !hasToWin  {
             score -= 1
-        } else if option == "Paper" && userOptions[randomChoice] == "Scissors" && hasToWin  {
+        } else if option == "🖐🏻" && userOptions[randomChoice] == "✌🏻" && hasToWin  {
             score -= 1
-        } else if option == "Paper" && userOptions[randomChoice] == "Scissors" && !hasToWin  {
+        } else if option == "🖐🏻" && userOptions[randomChoice] == "✌🏻" && !hasToWin  {
             score += 1
-        }  else if option == "Scissors" && userOptions[randomChoice] == "Rock" && hasToWin  {
+        }  else if option == "✌🏻" && userOptions[randomChoice] == "✊🏻" && hasToWin  {
             score -= 1
-        }  else if option == "Scissors" && userOptions[randomChoice] == "Rock" && !hasToWin  {
+        }  else if option == "✌🏻" && userOptions[randomChoice] == "✊🏻" && !hasToWin  {
             score += 1
-        }   else if option == "Scissors" && userOptions[randomChoice] == "Paper" && hasToWin  {
+        }   else if option == "✌🏻" && userOptions[randomChoice] == "🖐🏻" && hasToWin  {
             score += 1
-        }   else if option == "Scissors" && userOptions[randomChoice] == "Paper" && !hasToWin  {
+        }   else if option == "✌🏻" && userOptions[randomChoice] == "🖐🏻" && !hasToWin  {
             score += 1
         }
     }
