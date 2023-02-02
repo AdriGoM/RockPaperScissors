@@ -19,18 +19,24 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             RadialGradient(stops: [
-                .init(color: .mint, location: 0.6),
+                .init(color: .yellow, location: 0.6),
                 .init(color: .indigo, location: 0.1),
-            ], center: .top, startRadius: 90, endRadius: 700)
+                
+            ], center: .top, startRadius: 0, endRadius: 450)
             .ignoresSafeArea()
             
             VStack(spacing: 15) {
                 VStack(spacing: 30) {
-                    Text(hasToWin ? "Try to Win" : "Try to Lose")
+                    HStack {
+                        Text("Try to")
+                        Text(hasToWin ? " Win" : "Lose")
+                            .font(.system(size: 25))
+                            .bold()
+                    }
                     Text("\(userOptions[randomChoice])")
                         .font(.system(size: 90))
-                    Text("VS")
-                        .font(.system(size: 90))
+                    Text("⚡️")
+                        .font(.system(size: 70))
                         .fontWeight(.ultraLight)
                 }
                 HStack(spacing: 15) {
@@ -39,14 +45,14 @@ struct ContentView: View {
                             checkAnswer(option)
                         } label: {
                             Text("\(option)")
-                                .font(.system(size:45))
+                                .font(.system(size:50))
                         }
-                        
                     }
                 }
                 .padding()
                 
                 Text("Actual score: \(score)")
+                    .font(.system(size: 20))
                 
             }.alert("The game has ended", isPresented: $gameEnded) {
                 Button("New game", action: resetGame)
@@ -54,7 +60,7 @@ struct ContentView: View {
                 Text("Your final score is: \(score)")
             }
         }
-
+        
     }
     
     func checkAnswer(_ option: String) -> Void {
@@ -63,7 +69,7 @@ struct ContentView: View {
             gameEnded = true
         } else {
             userOptions.shuffle()
-            hasToWin = Bool.random()
+            hasToWin.toggle()
             randomChoice = Int.random(in: 0...2)
             rounds += 1
         }
@@ -91,13 +97,13 @@ struct ContentView: View {
             score -= 1
         } else if option == "🖐🏻" && userOptions[randomChoice] == "✌🏻" && !hasToWin  {
             score += 1
-        }  else if option == "✌🏻" && userOptions[randomChoice] == "✊🏻" && hasToWin  {
+        } else if option == "✌🏻" && userOptions[randomChoice] == "✊🏻" && hasToWin  {
             score -= 1
-        }  else if option == "✌🏻" && userOptions[randomChoice] == "✊🏻" && !hasToWin  {
+        } else if option == "✌🏻" && userOptions[randomChoice] == "✊🏻" && !hasToWin  {
             score += 1
-        }   else if option == "✌🏻" && userOptions[randomChoice] == "🖐🏻" && hasToWin  {
+        } else if option == "✌🏻" && userOptions[randomChoice] == "🖐🏻" && hasToWin  {
             score += 1
-        }   else if option == "✌🏻" && userOptions[randomChoice] == "🖐🏻" && !hasToWin  {
+        } else if option == "✌🏻" && userOptions[randomChoice] == "🖐🏻" && !hasToWin  {
             score += 1
         }
     }
